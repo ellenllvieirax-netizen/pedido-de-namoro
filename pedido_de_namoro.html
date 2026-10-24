@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff0f5">
+  <title>Uma perguntinha... 💖</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: linear-gradient(145deg, #fff0f5, #ffe1eb);
+      color: #71384f;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-align: center;
+    }
+    .card {
+      width: min(100%, 460px);
+      padding: 36px 24px 30px;
+      border: 1px solid rgba(168, 50, 91, .12);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, .82);
+      box-shadow: 0 18px 55px rgba(128, 45, 77, .14);
+    }
+    .heart { font-size: 48px; margin-bottom: 10px; }
+    h1 { margin: 0 0 12px; color: #a8325b; font-size: clamp(28px, 8vw, 38px); line-height: 1.15; }
+    p { margin: 0; font-size: 16px; line-height: 1.5; }
+    .buttons {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      height: 110px;
+      margin-top: 22px;
+    }
+    button {
+      min-width: 118px;
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font: inherit;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform .15s ease, background .15s ease;
+    }
+    #yes { background: #ff8fab; color: white; box-shadow: 0 7px 18px rgba(251, 111, 146, .25); }
+    #yes:hover { background: #fb6f92; transform: translateY(-2px); }
+    #no { background: #eee1e7; color: #684e59; }
+    #no.running { position: absolute; }
+    .note { margin-top: 12px; color: #a27686; font-size: 13px; }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: rgba(64, 30, 45, .42);
+    }
+    .overlay.show { display: grid; }
+    .dialog {
+      width: min(100%, 360px);
+      padding: 30px 24px;
+      border-radius: 24px;
+      background: white;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    }
+    .dialog h2 { margin: 0 0 12px; color: #a8325b; }
+    .dialog p { margin-bottom: 20px; }
+    .dialog button { min-width: 0; padding: 11px 20px; background: #ff8fab; color: white; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="heart" aria-hidden="true">💌</div>
+    <h1>Quer namorar comigo?</h1>
+    <p>Prometo dividir meus lanchinhos<br>(quase sempre) 🍓</p>
+    <div class="buttons" id="button-area">
+      <button id="yes" type="button">Sim 💘</button>
+      <button id="no" type="button">Não 🙈</button>
+    </div>
+    <div class="note">Feito com carinho e um pouquinho de código ✨</div>
+  </main>
+
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+    <section class="dialog">
+      <div class="heart" aria-hidden="true">🥰</div>
+      <h2 id="dialog-title">Aaaa, que felicidade!</h2>
+      <p>Eu sabia que você diria sim! Prometo tentar te fazer muito feliz 💕</p>
+      <button type="button" id="close">Fechar</button>
+    </section>
+  </div>
+
+  <script>
+    const area = document.getElementById('button-area');
+    const noButton = document.getElementById('no');
+    const overlay = document.getElementById('overlay');
+
+    function moveNoButton() {
+      noButton.classList.add('running');
+      const areaRect = area.getBoundingClientRect();
+      const buttonRect = noButton.getBoundingClientRect();
+      const maxX = Math.max(0, areaRect.width - buttonRect.width);
+      const maxY = Math.max(0, areaRect.height - buttonRect.height);
+      noButton.style.left = `${Math.random() * maxX}px`;
+      noButton.style.top = `${Math.random() * maxY}px`;
+    }
+
+    noButton.addEventListener('pointerenter', moveNoButton);
+    noButton.addEventListener('touchstart', (event) => {
+      event.preventDefault();
+      moveNoButton();
+    }, { passive: false });
+    noButton.addEventListener('click', moveNoButton);
+
+    document.getElementById('yes').addEventListener('click', () => overlay.classList.add('show'));
+    document.getElementById('close').addEventListener('click', () => overlay.classList.remove('show'));
+    overlay.addEventListener('click', (event) => {
+      if (event.target === overlay) overlay.classList.remove('show');
+    });
+  </script>
+</body>
+</html>
